@@ -2,10 +2,11 @@ plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
+    kotlin("plugin.serialization")
 }
 
 version = "1.0"
-private val ktor_version = "1.6.7"
+val kodeinVersion = "7.9.0"
 
 kotlin {
     android()
@@ -25,7 +26,9 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-core:$ktor_version")
+                implementation("io.ktor:ktor-client-core:1.6.7")
+                implementation("io.ktor:ktor-client-serialization:1.6.7")
+                implementation("org.kodein.di:kodein-di:$kodeinVersion")
             }
         }
         val commonTest by getting {
@@ -36,7 +39,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-android:$ktor_version")
+                implementation("io.ktor:ktor-client-android:1.6.7")
             }
         }
         val androidTest by getting {
