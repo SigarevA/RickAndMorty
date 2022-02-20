@@ -54,8 +54,8 @@ dependencies {
     implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
 
-
     implementation("com.arkivanov.decompose:decompose:${rootProject.extra["decomposeVersion"]}")
     implementation("com.arkivanov.decompose:extensions-compose-jetpack:${rootProject.extra["decomposeVersion"]}")
     implementation("org.kodein.di:kodein-di:${rootProject.extra["kodeinVersion"]}")
+    implementation("com.github.skydoves:landscapist-coil:1.3.9")
 }

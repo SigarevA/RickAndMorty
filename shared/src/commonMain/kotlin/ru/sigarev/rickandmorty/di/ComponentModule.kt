@@ -7,6 +7,7 @@ import org.kodein.di.instance
 import ru.sigarev.data_remote.di.repositoryModule
 import ru.sigarev.rickandmorty.CharacterList.CharacterList
 import ru.sigarev.rickandmorty.CharacterList.CharacterListComponent
+import ru.sigarev.rickandmorty.domain.CharacterDomain
 import ru.sigarev.rickandmorty.root.Root
 import ru.sigarev.rickandmorty.root.RootComponent
 
@@ -17,7 +18,12 @@ val componentModule = DI.Module("ComponentModule") {
         RootComponent(di, context)
     }
 
-    bindFactory<ComponentContext, CharacterList> { ctx ->
-        CharacterListComponent(ctx, instance())
+    bindFactory<CharacterListArguments, CharacterList> { args ->
+        CharacterListComponent(args.ctx, instance(), args.navigateToDetail)
     }
 }
+
+data class CharacterListArguments(
+    val ctx: ComponentContext,
+    val navigateToDetail: (CharacterDomain) -> Unit
+)

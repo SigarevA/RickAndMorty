@@ -7,12 +7,15 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import ru.sigarev.data_remote.characters.CharactersRepository
 import ru.sigarev.rickandmorty.CharacterList.CharacterList.Model
+import ru.sigarev.rickandmorty.CharacterList.Store.CharacterListStore
 import ru.sigarev.rickandmorty.CharacterList.Store.CharacterListStoreProvider
+import ru.sigarev.rickandmorty.domain.CharacterDomain
 import ru.sigarev.rickandmorty.utils.asValue
 
 internal class CharacterListComponent(
     componentContext: ComponentContext,
-    charactersRepository: CharactersRepository
+    charactersRepository: CharactersRepository,
+    val navigateToDetail: (CharacterDomain) -> Unit
 ) : CharacterList, ComponentContext by componentContext {
     private val store = instanceKeeper.getStore {
         CharacterListStoreProvider(
@@ -22,6 +25,18 @@ internal class CharacterListComponent(
     }
 
     override val model: Value<Model> = store.asValue().map {
-        Model(it.characters)
+        Model(
+            it.characters,
+            it.isPageLoading,
+            it.isInitLoading
+        )
+    }
+
+    override fun loadPage() {
+        store.accept(CharacterListStore.Intent.FetchPageCharacters)
+    }
+
+    override fun openDetail(character: CharacterDomain) {
+        navigateToDetail(character)
     }
 }

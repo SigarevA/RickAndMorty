@@ -12,20 +12,24 @@ import ru.sigarev.data_remote.characters.CharactersRepository
 import ru.sigarev.data_remote.model.Character
 import ru.sigarev.rickandmorty.CharacterList.Store.CharacterListStore.Intent
 import ru.sigarev.rickandmorty.CharacterList.Store.CharacterListStore.State
+import ru.sigarev.rickandmorty.mappers.toCharacterDomain
 
 internal class CharacterListStoreProvider(
     private val storeFactory: StoreFactory,
     private val charactersRepository: CharactersRepository
 ) {
-    fun provide(): CharacterListStore = object : CharacterListStore, Store<Intent, State, Nothing> by storeFactory.create(
-        name = CharacterListStore::class.simpleName,
-        initialState = State(),
-        bootstrapper = SimpleBootstrapper(Unit),
-        executorFactory = ::ExecutorImpl,
-        reducer = ReducerImpl
-    ) {}
+    fun provide(): CharacterListStore =
+        object : CharacterListStore, Store<Intent, State, Nothing> by storeFactory.create(
+            name = CharacterListStore::class.simpleName,
+            initialState = State(),
+            bootstrapper = SimpleBootstrapper(Unit),
+            executorFactory = ::ExecutorImpl,
+            reducer = ReducerImpl
+        ) {}
 
     private sealed class Result {
+        object InitLoading : Result()
+        object PageLoading : Result()
         data class CharacterLoaded(val characters: List<Character>) : Result()
     }
 
@@ -33,35 +37,48 @@ internal class CharacterListStoreProvider(
 
         // Action: Called once by the bootstrapper
         override fun executeAction(action: Unit, getState: () -> State) {
-            fetchCharacters()
+            dispatch(Result.InitLoading)
+            fetchCharacters(getState().numberPage)
         }
 
         // Intent: Called via a user interaction
         override fun executeIntent(intent: Intent, getState: () -> State) {
             when (intent) {
-                is Intent.FetchPageCharacters -> fetchCharacters()
+                is Intent.FetchPageCharacters -> {
+                    if (
+                        with(getState()) {
+                            characters.isNotEmpty() && !isInitLoading && !isPageLoading
+                        }
+                    ) {
+                        dispatch(Result.PageLoading)
+                        fetchCharacters(getState().numberPage)
+                    }
+                }
             }
         }
 
         // Fetch quote via a suspend function and dispatch the result to the reducer.
-        private fun fetchCharacters() {
+        private fun fetchCharacters(numberPage: Int) {
             scope.launch {
                 val newQuote = withContext(Dispatchers.Default) {
-                    charactersRepository.getCharacters(0)
+                    charactersRepository.getCharacters(numberPage)
                 }
                 dispatch(Result.CharacterLoaded(newQuote))
             }
         }
     }
 
-
     private object ReducerImpl : Reducer<State, Result> {
         override fun State.reduce(result: Result): State {
             return when (result) {
                 is Result.CharacterLoaded -> copy(
                     numberPage = numberPage + 1,
-                    characters = result.characters
+                    characters = characters.plus(result.characters.map { it.toCharacterDomain() }),
+                    isPageLoading = false,
+                    isInitLoading = false
                 )
+                Result.InitLoading -> copy(isInitLoading = true)
+                Result.PageLoading -> copy(isPageLoading = true)
             }
         }
     }
