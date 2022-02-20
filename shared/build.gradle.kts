@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
+    id("kotlin-parcelize")
 }
 
 version = "1.0"
@@ -21,9 +22,21 @@ kotlin {
             baseName = "shared"
         }
     }
-    
+
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                implementation(project(":data-remote"))
+                implementation("com.arkivanov.decompose:decompose:${rootProject.extra["decomposeVersion"]}")
+                implementation("com.arkivanov.mvikotlin:mvikotlin:${rootProject.extra["mviKotlinVersion"]}")
+                implementation("com.arkivanov.mvikotlin:rx:${rootProject.extra["mviKotlinVersion"]}")
+                implementation("com.arkivanov.mvikotlin:mvikotlin-main:${rootProject.extra["mviKotlinVersion"]}")
+                implementation("com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines:${rootProject.extra["mviKotlinVersion"]}")
+                implementation("org.kodein.di:kodein-di:${rootProject.extra["kodeinVersion"]}")
+
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${rootProject.extra["coroutinesVersion"]}")
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
