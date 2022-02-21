@@ -18,7 +18,7 @@ private val client by lazy {
     }
 }
 
-val ds = DI {
+val repositoryModule = DI.Module("RepositoryModule") {
     bindSingleton<CharactersRepository> { CharactersRepositoryImpl(client) }
     bindSingleton<EpisodeRepository> { EpisodeRepositoryImpl(client) }
 }

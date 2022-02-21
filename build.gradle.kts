@@ -1,3 +1,8 @@
+val decomposeVersion by rootProject.extra { "0.4.0" }
+val mviKotlinVersion by rootProject.extra { "3.0.0-alpha02" }
+val coroutinesVersion by rootProject.extra { "1.5.2" }
+val kodeinVersion by rootProject.extra { "7.9.0" }
+
 buildscript {
     repositories {
         gradlePluginPortal()

@@ -6,7 +6,6 @@ plugins {
 }
 
 version = "1.0"
-val kodeinVersion = "7.9.0"
 
 kotlin {
     android()
@@ -28,7 +27,7 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-client-core:1.6.7")
                 implementation("io.ktor:ktor-client-serialization:1.6.7")
-                implementation("org.kodein.di:kodein-di:$kodeinVersion")
+                implementation("org.kodein.di:kodein-di:${rootProject.extra["kodeinVersion"]}")
             }
         }
         val commonTest by getting {
