@@ -1,4 +1,4 @@
-package ru.sigarev.rickandmorty.CharacterList.Store
+package ru.sigarev.rickandmorty.CharacterList.store
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
@@ -10,8 +10,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.sigarev.data_remote.characters.CharactersRepository
 import ru.sigarev.data_remote.model.Character
-import ru.sigarev.rickandmorty.CharacterList.Store.CharacterListStore.Intent
-import ru.sigarev.rickandmorty.CharacterList.Store.CharacterListStore.State
+import ru.sigarev.rickandmorty.CharacterList.store.CharacterListStore.Intent
+import ru.sigarev.rickandmorty.CharacterList.store.CharacterListStore.State
 import ru.sigarev.rickandmorty.mappers.toCharacterDomain
 
 internal class CharacterListStoreProvider(
@@ -34,7 +34,6 @@ internal class CharacterListStoreProvider(
     }
 
     private inner class ExecutorImpl : CoroutineExecutor<Intent, Unit, State, Result, Nothing>() {
-
         // Action: Called once by the bootstrapper
         override fun executeAction(action: Unit, getState: () -> State) {
             dispatch(Result.InitLoading)

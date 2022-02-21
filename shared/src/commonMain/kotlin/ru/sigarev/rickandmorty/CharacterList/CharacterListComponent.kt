@@ -7,8 +7,8 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import ru.sigarev.data_remote.characters.CharactersRepository
 import ru.sigarev.rickandmorty.CharacterList.CharacterList.Model
-import ru.sigarev.rickandmorty.CharacterList.Store.CharacterListStore
-import ru.sigarev.rickandmorty.CharacterList.Store.CharacterListStoreProvider
+import ru.sigarev.rickandmorty.CharacterList.store.CharacterListStore
+import ru.sigarev.rickandmorty.CharacterList.store.CharacterListStoreProvider
 import ru.sigarev.rickandmorty.domain.CharacterDomain
 import ru.sigarev.rickandmorty.utils.asValue
 

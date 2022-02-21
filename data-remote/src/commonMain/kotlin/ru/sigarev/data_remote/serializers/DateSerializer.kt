@@ -1,0 +1,1 @@
+package ru.sigarev.data_remote.serializers

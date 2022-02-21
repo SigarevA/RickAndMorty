@@ -1,9 +1,8 @@
-package ru.sigarev.rickandmorty.CharacterList.Store
+package ru.sigarev.rickandmorty.CharacterList.store
 
 import com.arkivanov.mvikotlin.core.store.Store
-import ru.sigarev.data_remote.model.Character
-import ru.sigarev.rickandmorty.CharacterList.Store.CharacterListStore.Intent
-import ru.sigarev.rickandmorty.CharacterList.Store.CharacterListStore.State
+import ru.sigarev.rickandmorty.CharacterList.store.CharacterListStore.Intent
+import ru.sigarev.rickandmorty.CharacterList.store.CharacterListStore.State
 import ru.sigarev.rickandmorty.domain.CharacterDomain
 
 interface CharacterListStore : Store<Intent, State, Nothing> {

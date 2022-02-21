@@ -94,7 +94,9 @@ fun DetailCharacterScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .clickable { }
+                    .clickable {
+                        detailCharacterComponent.openEpisodes()
+                    }
                     .padding(vertical = 16.dp)
             ) {
                 Icon(painter = painterResource(R.drawable.ic_movies), contentDescription = null)
