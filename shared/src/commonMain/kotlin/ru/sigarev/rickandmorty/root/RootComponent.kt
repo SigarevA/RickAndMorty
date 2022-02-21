@@ -11,7 +11,9 @@ import org.kodein.di.DI
 import org.kodein.di.factory
 import ru.sigarev.rickandmorty.CharacterList.CharacterList
 import ru.sigarev.rickandmorty.DetailCharacter.DetailCharacterComponent
+import ru.sigarev.rickandmorty.EpisodeList.EpisodeList
 import ru.sigarev.rickandmorty.di.CharacterListArguments
+import ru.sigarev.rickandmorty.di.EpisodeListArguments
 import ru.sigarev.rickandmorty.domain.CharacterDomain
 
 internal class RootComponent(
@@ -19,6 +21,7 @@ internal class RootComponent(
     componentContext: ComponentContext
 ) : Root, ComponentContext by componentContext {
     private val characterListFactory by di.factory<CharacterListArguments, CharacterList>()
+    private val episodeListFactory by di.factory<EpisodeListArguments, EpisodeList>()
 
     private val router =
         router<Config, Root.Child>(
@@ -35,9 +38,25 @@ internal class RootComponent(
             is Config.Main -> Root.Child.Main(
                 characterListFactory(CharacterListArguments(
                     componentContext
-                ) { character -> router.push(Config.DetailCharacter(character)) })
+                ) { character ->
+                    if (routerState.value.activeChild.instance is Root.Child.Main)
+                        router.push(Config.DetailCharacter(character))
+                })
             )
-            is Config.DetailCharacter -> Root.Child.Detail(DetailCharacterComponent(config.character))
+            is Config.DetailCharacter -> Root.Child.Detail(
+                DetailCharacterComponent(config.character) { episodes ->
+                    if (routerState.value.activeChild.instance is Root.Child.Detail)
+                        router.push(Config.EpisodesList(episodes))
+                }
+            )
+            is Config.EpisodesList -> Root.Child.Episodes(
+                episodeListFactory(
+                    EpisodeListArguments(
+                        componentContext,
+                        config.episodes
+                    )
+                )
+            )
         }
 
     private sealed class Config : Parcelable {
@@ -46,5 +65,8 @@ internal class RootComponent(
 
         @Parcelize
         class DetailCharacter(val character: CharacterDomain) : Config()
+
+        @Parcelize
+        class EpisodesList(val episodes: List<String>) : Config()
     }
 }

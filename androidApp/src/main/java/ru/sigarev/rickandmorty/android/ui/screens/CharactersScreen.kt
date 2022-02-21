@@ -1,6 +1,5 @@
 package ru.sigarev.rickandmorty.android.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -54,16 +53,18 @@ fun CharactersScreen(
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .clickable {
-                            characterList.openDetail(it)
-                        },
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
                     shape = RoundedCornerShape(12.dp),
                     elevation = 4.dp
                 ) {
                     Row(
-                        modifier = Modifier.padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(12.dp))
+                            .clickable {
+                                characterList.openDetail(it)
+                            }
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         CoilImage(
                             imageModel = it.image,

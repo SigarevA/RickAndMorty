@@ -11,13 +11,13 @@ import androidx.core.view.WindowCompat
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.defaultComponentContext
 import com.arkivanov.decompose.extensions.compose.jetpack.Children
-import com.arkivanov.decompose.extensions.compose.jetpack.animation.child.crossfade
 import com.arkivanov.decompose.extensions.compose.jetpack.animation.child.slide
 import com.google.accompanist.insets.ProvideWindowInsets
 import org.kodein.di.factory
 import ru.sigarev.rickandmorty.android.di.DIHolder
 import ru.sigarev.rickandmorty.android.ui.screens.CharactersScreen
 import ru.sigarev.rickandmorty.android.ui.screens.DetailCharacterScreen
+import ru.sigarev.rickandmorty.android.ui.screens.EpisodesScreen
 import ru.sigarev.rickandmorty.android.ui.theme.RickAndMortyAppTheme
 import ru.sigarev.rickandmorty.root.Root
 
@@ -48,6 +48,9 @@ class MainActivity : AppCompatActivity() {
                                 }
                                 is Root.Child.Detail -> {
                                     DetailCharacterScreen(child.component)
+                                }
+                                is Root.Child.Episodes -> {
+                                    EpisodesScreen(child.component)
                                 }
                             }
                         }

@@ -7,6 +7,8 @@ import ru.sigarev.rickandmorty.domain.CharacterDomain
 interface DetailCharacter {
     val model: Value<Model>
 
+    fun openEpisodes()
+
     data class Model(
         val character: CharacterDomain
     )
