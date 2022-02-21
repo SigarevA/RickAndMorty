@@ -12,6 +12,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,16 +31,16 @@ fun CharactersScreen(
 ) {
     val state = characterList.model.subscribeAsState()
     val scrollState = rememberLazyListState()
-
-    Log.d("MainActivity", "scrllState : ${scrollState.firstVisibleItemIndex}")
-    Log.d("MainActivity", "scrllState : ${scrollState.firstVisibleItemScrollOffset}")
-    Log.d("MainActivity", "totalItems : ${scrollState.layoutInfo.totalItemsCount}")
-    Log.d("MainActivity", "scrllState : ${scrollState.layoutInfo.visibleItemsInfo.lastIndex}")
+    val indexLastElements =
+        remember(scrollState.firstVisibleItemIndex, scrollState.firstVisibleItemScrollOffset) {
+            with(scrollState) { firstVisibleItemIndex + layoutInfo.visibleItemsInfo.lastIndex }
+        }
 
     SideEffect {
-        if (with(scrollState) { firstVisibleItemIndex + layoutInfo.visibleItemsInfo.lastIndex } == state.value.characters.size - 1)
+        if (indexLastElements == state.value.characters.size - 1)
             characterList.loadPage()
     }
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -57,7 +58,8 @@ fun CharactersScreen(
                         .clickable {
                             characterList.openDetail(it)
                         },
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    elevation = 4.dp
                 ) {
                     Row(
                         modifier = Modifier.padding(8.dp),

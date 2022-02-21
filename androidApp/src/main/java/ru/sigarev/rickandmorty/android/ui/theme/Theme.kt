@@ -9,20 +9,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import ru.sigarev.rickandmorty.android.RickAndMortyApp
 
 private val DarkColorPalette = darkColors(
     primary = Purple200,
     primaryVariant = Purple700,
     secondary = Teal200,
-    background = Color(0xFFF6FAFB)
 )
 
 private val LightColorPalette = lightColors(
     primary = Purple500,
     primaryVariant = Purple700,
     secondary = Teal200,
-    background = Color(0xFFF6FAFB)
     /* Other default colors to override
     background = Color.White,
     surface = Color.White,

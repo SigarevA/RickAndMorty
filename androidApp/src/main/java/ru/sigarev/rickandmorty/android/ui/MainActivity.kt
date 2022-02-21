@@ -12,6 +12,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.defaultComponentContext
 import com.arkivanov.decompose.extensions.compose.jetpack.Children
 import com.arkivanov.decompose.extensions.compose.jetpack.animation.child.crossfade
+import com.arkivanov.decompose.extensions.compose.jetpack.animation.child.slide
 import com.google.accompanist.insets.ProvideWindowInsets
 import org.kodein.di.factory
 import ru.sigarev.rickandmorty.android.di.DIHolder
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         Children(
                             routerState = component.routerState,
-                            animation = crossfade()
+                            animation = slide()
                         ) {
                             when (val child = it.instance) {
                                 is Root.Child.Main -> {
