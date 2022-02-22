@@ -9,9 +9,9 @@ import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
 import org.kodein.di.DI
 import org.kodein.di.factory
-import ru.sigarev.rickandmorty.CharacterList.CharacterList
-import ru.sigarev.rickandmorty.DetailCharacter.DetailCharacterComponent
-import ru.sigarev.rickandmorty.EpisodeList.EpisodeList
+import ru.sigarev.rickandmorty.character_list.CharacterList
+import ru.sigarev.rickandmorty.detail_character.DetailCharacterComponent
+import ru.sigarev.rickandmorty.episode_list.EpisodeList
 import ru.sigarev.rickandmorty.di.CharacterListArguments
 import ru.sigarev.rickandmorty.di.EpisodeListArguments
 import ru.sigarev.rickandmorty.domain.CharacterDomain

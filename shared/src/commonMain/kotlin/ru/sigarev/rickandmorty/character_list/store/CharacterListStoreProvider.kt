@@ -1,4 +1,4 @@
-package ru.sigarev.rickandmorty.CharacterList.store
+package ru.sigarev.rickandmorty.character_list.store
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
@@ -10,8 +10,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.sigarev.data_remote.characters.CharactersRepository
 import ru.sigarev.data_remote.model.Character
-import ru.sigarev.rickandmorty.CharacterList.store.CharacterListStore.Intent
-import ru.sigarev.rickandmorty.CharacterList.store.CharacterListStore.State
+import ru.sigarev.rickandmorty.character_list.store.CharacterListStore.Intent
+import ru.sigarev.rickandmorty.character_list.store.CharacterListStore.State
 import ru.sigarev.rickandmorty.mappers.toCharacterDomain
 
 internal class CharacterListStoreProvider(
@@ -30,7 +30,11 @@ internal class CharacterListStoreProvider(
     private sealed class Result {
         object InitLoading : Result()
         object PageLoading : Result()
+        object FullLoading : Result()
+        object UnsetException : Result()
+        object Refresh : Result()
         data class CharacterLoaded(val characters: List<Character>) : Result()
+        class ExceptionLoading(val throwable: Throwable) : Result()
     }
 
     private inner class ExecutorImpl : CoroutineExecutor<Intent, Unit, State, Result, Nothing>() {
@@ -46,12 +50,17 @@ internal class CharacterListStoreProvider(
                 is Intent.FetchPageCharacters -> {
                     if (
                         with(getState()) {
-                            characters.isNotEmpty() && !isInitLoading && !isPageLoading
+                            characters.isNotEmpty() && !isInitLoading && !isPageLoading && !isFull
                         }
                     ) {
                         dispatch(Result.PageLoading)
                         fetchCharacters(getState().numberPage)
                     }
+                }
+                is Intent.RemoveError -> dispatch(Result.UnsetException)
+                is Intent.RefreshCharacters -> {
+                    dispatch(Result.Refresh)
+                    fetchCharacters(1)
                 }
             }
         }
@@ -59,10 +68,16 @@ internal class CharacterListStoreProvider(
         // Fetch quote via a suspend function and dispatch the result to the reducer.
         private fun fetchCharacters(numberPage: Int) {
             scope.launch {
-                val newQuote = withContext(Dispatchers.Default) {
+                val response = withContext(Dispatchers.Default) {
                     charactersRepository.getCharacters(numberPage)
                 }
-                dispatch(Result.CharacterLoaded(newQuote))
+                if (response.statusCode == 200)
+                    dispatch(Result.CharacterLoaded(response.data!!))
+                if (response.statusCode == 404)
+                    dispatch(Result.FullLoading)
+                response.exception?.let {
+                    dispatch(Result.ExceptionLoading(it))
+                }
             }
         }
     }
@@ -74,11 +89,37 @@ internal class CharacterListStoreProvider(
                     numberPage = numberPage + 1,
                     characters = characters.plus(result.characters.map { it.toCharacterDomain() }),
                     isPageLoading = false,
-                    isInitLoading = false
+                    isInitLoading = false,
+                    throwable = null
                 )
                 Result.InitLoading -> copy(isInitLoading = true)
                 Result.PageLoading -> copy(isPageLoading = true)
+                Result.FullLoading -> copy(
+                    isPageLoading = false,
+                    isInitLoading = false,
+                    throwable = null,
+                    isFull = false
+                )
+                Result.UnsetException -> copy(throwable = null)
+                Result.Refresh -> copy(
+                    numberPage = 1,
+                    characters = emptyList(),
+                    isPageLoading = false,
+                    isInitLoading = true,
+                    throwable = null,
+                    isFull = true
+                )
+                is Result.ExceptionLoading -> reduceException(result.throwable)
             }
         }
+
+        private fun State.reduceException(throwable: Throwable): State =
+            copy(
+                numberPage = numberPage,
+                characters = characters,
+                isPageLoading = false,
+                isInitLoading = false,
+                throwable = throwable
+            )
     }
 }

@@ -53,6 +53,7 @@ dependencies {
 
     implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-placeholder:$accompanistVersion")
 
     implementation("com.arkivanov.decompose:decompose:${rootProject.extra["decomposeVersion"]}")
     implementation("com.arkivanov.decompose:extensions-compose-jetpack:${rootProject.extra["decomposeVersion"]}")
