@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="loading_error">Упс, данные не загружены!</string>
+    <string name="repeat">Повторить</string>
+    <string name="action_episodes">Эпизоды</string>
+    <string name="content">Содержание</string>
+    <string name="app_name">Rick and Morty</string>
+</resources>

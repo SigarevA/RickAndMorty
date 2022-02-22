@@ -1,7 +1,6 @@
-package ru.sigarev.rickandmorty.DetailCharacter
+package ru.sigarev.rickandmorty.detail_character
 
 import com.arkivanov.decompose.value.Value
-import ru.sigarev.data_remote.model.Character
 import ru.sigarev.rickandmorty.domain.CharacterDomain
 
 interface DetailCharacter {

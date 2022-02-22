@@ -15,12 +15,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.skydoves.landscapist.coil.CoilImage
-import ru.sigarev.rickandmorty.DetailCharacter.DetailCharacter
+import ru.sigarev.rickandmorty.detail_character.DetailCharacter
 import ru.sigarev.rickandmorty.android.R
 
 @Composable
@@ -68,7 +69,7 @@ fun DetailCharacterScreen(
                 shape = RoundedCornerShape(2.dp)
             ) {
                 Text(
-                    text = "Content",
+                    text = stringResource(id = R.string.content),
                     modifier = Modifier.padding(16.dp),
                     style = MaterialTheme.typography.body1,
                     color = MaterialTheme.colors.onBackground.copy(alpha = 0.7f)
@@ -102,7 +103,7 @@ fun DetailCharacterScreen(
                 Icon(painter = painterResource(R.drawable.ic_movies), contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    "Эпизоды",
+                    stringResource(id = R.string.action_episodes),
                     modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.body1,
                     color = MaterialTheme.colors.onBackground

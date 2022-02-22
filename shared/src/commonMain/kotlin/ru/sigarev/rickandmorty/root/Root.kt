@@ -2,9 +2,9 @@ package ru.sigarev.rickandmorty.root
 
 import com.arkivanov.decompose.router.RouterState
 import com.arkivanov.decompose.value.Value
-import ru.sigarev.rickandmorty.CharacterList.CharacterList
-import ru.sigarev.rickandmorty.DetailCharacter.DetailCharacter
-import ru.sigarev.rickandmorty.EpisodeList.EpisodeList
+import ru.sigarev.rickandmorty.character_list.CharacterList
+import ru.sigarev.rickandmorty.detail_character.DetailCharacter
+import ru.sigarev.rickandmorty.episode_list.EpisodeList
 
 interface Root {
     val routerState: Value<RouterState<*, Child>>

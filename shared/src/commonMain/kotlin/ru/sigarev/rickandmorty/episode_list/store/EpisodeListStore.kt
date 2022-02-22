@@ -1,8 +1,8 @@
-package ru.sigarev.rickandmorty.EpisodeList.store
+package ru.sigarev.rickandmorty.episode_list.store
 
 import com.arkivanov.mvikotlin.core.store.Store
-import ru.sigarev.rickandmorty.EpisodeList.store.EpisodeListStore.Intent
-import ru.sigarev.rickandmorty.EpisodeList.store.EpisodeListStore.State
+import ru.sigarev.rickandmorty.episode_list.store.EpisodeListStore.Intent
+import ru.sigarev.rickandmorty.episode_list.store.EpisodeListStore.State
 import ru.sigarev.rickandmorty.domain.EpisodeDomain
 
 interface EpisodeListStore : Store<Intent, State, Nothing> {

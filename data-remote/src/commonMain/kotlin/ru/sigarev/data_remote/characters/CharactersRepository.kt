@@ -4,5 +4,5 @@ import ru.sigarev.data_remote.model.Character
 import ru.sigarev.data_remote.model.ResponseApi
 
 interface CharactersRepository {
-    suspend fun getCharacters(numberPage: Int): List<Character>
+    suspend fun getCharacters(numberPage: Int): ResponseApi<List<Character>>
 }

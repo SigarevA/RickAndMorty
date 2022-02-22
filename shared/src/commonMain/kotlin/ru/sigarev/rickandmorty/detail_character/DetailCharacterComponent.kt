@@ -1,4 +1,4 @@
-package ru.sigarev.rickandmorty.DetailCharacter
+package ru.sigarev.rickandmorty.detail_character
 
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value

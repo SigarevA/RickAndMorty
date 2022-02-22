@@ -1,4 +1,4 @@
-package ru.sigarev.rickandmorty.EpisodeList.store
+package ru.sigarev.rickandmorty.episode_list.store
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
@@ -10,8 +10,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.sigarev.data_remote.episodes.EpisodeRepository
 import ru.sigarev.data_remote.model.Episode
-import ru.sigarev.rickandmorty.EpisodeList.store.EpisodeListStore.Intent
-import ru.sigarev.rickandmorty.EpisodeList.store.EpisodeListStore.State
+import ru.sigarev.data_remote.model.ResponseApi
+import ru.sigarev.rickandmorty.episode_list.store.EpisodeListStore.Intent
+import ru.sigarev.rickandmorty.episode_list.store.EpisodeListStore.State
 import ru.sigarev.rickandmorty.mappers.toEpisodeDomain
 
 class EpisodeListStoreProvider(
@@ -49,18 +50,33 @@ class EpisodeListStoreProvider(
 
         private fun fetchEpisodes(urlEpisodes: List<String>) {
             scope.launch {
-                val newQuote = withContext(Dispatchers.Default) {
-                    val episodes = urlEpisodes.foldIndexed("", { i, acc, s ->
-                        acc + s.split("/")
-                            .let { it[it.lastIndex] } + if (i != urlEpisodes.lastIndex) "," else ""
-                    })
-
-                    with(episodeRepository) {
-                        if (urlEpisodes.size == 1) listOf(getSingleEpisodes(episodes))
-                        else getMultiEpisodes(episodes)
+                val episodes = urlEpisodes.foldIndexed("", { i, acc, s ->
+                    acc + s.split("/")
+                        .let { it[it.lastIndex] } + if (i != urlEpisodes.lastIndex) "," else ""
+                })
+                if (urlEpisodes.size == 1) {
+                    val response = withContext(Dispatchers.Default) {
+                        episodeRepository.getSingleEpisodes(episodes)
+                    }
+                    response.notifyException()
+                    response.data?.let {
+                        dispatch(Result.EpisodesLoaded(listOf(it)))
+                    }
+                } else {
+                    val response = withContext(Dispatchers.Default) {
+                        episodeRepository.getMultiEpisodes(episodes)
+                    }
+                    response.notifyException()
+                    response.data?.let {
+                        dispatch(Result.EpisodesLoaded(it))
                     }
                 }
-                dispatch(Result.EpisodesLoaded(newQuote))
+            }
+        }
+
+        private fun ResponseApi<*>.notifyException() {
+            exception?.let {
+                dispatch(Result.ExceptionLoading(it))
             }
         }
     }

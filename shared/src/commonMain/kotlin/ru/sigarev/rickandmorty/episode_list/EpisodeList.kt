@@ -1,4 +1,4 @@
-package ru.sigarev.rickandmorty.EpisodeList
+package ru.sigarev.rickandmorty.episode_list
 
 import com.arkivanov.decompose.value.Value
 import ru.sigarev.rickandmorty.domain.EpisodeDomain
