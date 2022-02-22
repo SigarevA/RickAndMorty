@@ -1,3 +1,3 @@
 # RickAndMorty
 
-Api : Here [Here](https://rickandmortyapi.com/).
+Api : [Here](https://rickandmortyapi.com/).
